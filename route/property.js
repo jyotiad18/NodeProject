@@ -4,6 +4,7 @@ var routeproperty = express.Router();
 const tablename = "propertydata.json";
 const Service = require('../utils/service.js');
 const sc = new Service(tablename);
+var _ = require('lodash');
 routeproperty.use((req, res, next)=>{
 	
 	/*var token = req.session.token;
@@ -49,23 +50,21 @@ routeproperty.get('/property',(req,res)=> {
 
 //GET 
 //api/property/id
-
 routeproperty.get('/property/:id',(req,res)=> {
 	    
-		console.log(Object.keys(req.params));
-		//res.status(200).send(JSON.parse(req.params));
-		/*fs.getJSONData(fileName,(data) => {
-			
-			 var property = data.find((d)=>{
-				 
-				 return d.id == req.params.id;
-				 
-			 });
-			 res.status(200).send(property);
-					
+		req.params.id = parseInt(req.params.id);
+		sc.getByValue(req.params,(data)=>{
+			 res.status(200).send(data);
 		});
-		*/
-		
+});
+//GET
+//api/property/id/name
+routeproperty.get('/property/:id/:name',(req,res)=> {
+	    
+		req.params.id = parseInt(req.params.id);
+		sc.getByValue(req.params,(data)=>{
+			 res.status(200).send(data);
+		});
 });
 /*
 //POST
