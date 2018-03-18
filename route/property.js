@@ -1,14 +1,12 @@
 var jwt      	=   require('jsonwebtoken');
 var express 	= 	require('express')
 var routeproperty = express.Router();
-var fs 			= 	require('../utils/io.js');
-var config 		= 	require('../config.js');
-const fileName	=  "propertydata.json";
-
-
+const tablename = "propertydata.json";
+const Service = require('../utils/service.js');
+const sc = new Service(tablename);
 routeproperty.use((req, res, next)=>{
 	
-	var token = req.session.token;
+	/*var token = req.session.token;
 	if (token) 
 	{
 		jwt.verify(token, config.secret, function(err, decoded) {      
@@ -26,6 +24,10 @@ routeproperty.use((req, res, next)=>{
 	{		
 		res.status(400).send({success: false, message: 'authenticate fail'});		
 	}
+	net
+	*/
+	
+	next();
 		
 });
 
@@ -33,19 +35,26 @@ routeproperty.use((req, res, next)=>{
 // api/property
 
 routeproperty.get('/property',(req,res)=> {
+	   
+	   
+	  //fs.getData((data)=>{
+		//  res.status(200).send(data)
+	  //});
 	    
-		fs.getJSONData(fileName,(data) => {
-			
+		sc.getAll((data) => {
 			 res.status(200).send(data);
-					
 		});
+	   
 });
 
 //GET 
 //api/property/id
+
 routeproperty.get('/property/:id',(req,res)=> {
 	    
-		fs.getJSONData(fileName,(data) => {
+		console.log(Object.keys(req.params));
+		//res.status(200).send(JSON.parse(req.params));
+		/*fs.getJSONData(fileName,(data) => {
 			
 			 var property = data.find((d)=>{
 				 
@@ -55,8 +64,10 @@ routeproperty.get('/property/:id',(req,res)=> {
 			 res.status(200).send(property);
 					
 		});
+		*/
+		
 });
-
+/*
 //POST
 //api/property
 routeproperty.post('/property',(req,res) => {	
@@ -92,6 +103,7 @@ routeproperty.put('/property/:id',(req,res) => {
 });
 
 //DELETE
+//property/:id
 routeproperty.delete('/property/:id',(req,res) => {
 	
 	fs.getJSONData(fileName,(v) => {
@@ -105,5 +117,6 @@ routeproperty.delete('/property/:id',(req,res) => {
 	   res.status(200).send();
 	});
 });
+*/
 
 module.exports = routeproperty ;
