@@ -51,6 +51,29 @@ class Fileio {
 			  }
 		 })
 	 }
+	 
+	 writeData(data,callback)
+	 {
+		 this.checkFile((r)=>{
+			if (r)
+			{
+				
+				fs.writeFile(this.fullpath,JSON.stringify(data) , function(err) {
+					if(err) {
+						callback({'message':err});
+					}
+					else 
+						callback({'message':'file write'})
+					
+				});
+						
+			}
+			else 
+			{
+				callback({'message':'file not found'});
+			}
+		 })
+	 }
 }
 
 module.exports = Fileio ;

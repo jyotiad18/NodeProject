@@ -1,11 +1,12 @@
 var jwt      	=   require('jsonwebtoken');
 var express 	= 	require('express')
-var routeproperty = express.Router();
+var _router     = express.Router();
+
 const tablename = "propertydata.json";
 const Service = require('../utils/service.js');
 const sc = new Service(tablename);
-var _ = require('lodash');
-routeproperty.use((req, res, next)=>{
+
+_router.use((req, res, next)=>{
 	
 	/*var token = req.session.token;
 	if (token) 
@@ -35,7 +36,7 @@ routeproperty.use((req, res, next)=>{
 // GET
 // api/property
 
-routeproperty.get('/property',(req,res)=> {
+_router.get('/property',(req,res)=> {
 	   
 	   
 	  //fs.getData((data)=>{
@@ -50,9 +51,8 @@ routeproperty.get('/property',(req,res)=> {
 
 //GET 
 //api/property/id
-routeproperty.get('/property/:id',(req,res)=> {
+_router.get('/property/:id',(req,res)=> {
 	    
-		req.params.id = parseInt(req.params.id);
 		sc.getByValue(req.params,(data)=>{
 			 res.status(200).send(data);
 		});
@@ -61,51 +61,43 @@ routeproperty.get('/property/:id',(req,res)=> {
 //api/property/id/name
 routeproperty.get('/property/:id/:name',(req,res)=> {
 	    
-		req.params.id = parseInt(req.params.id);
 		sc.getByValue(req.params,(data)=>{
 			 res.status(200).send(data);
 		});
 });
-/*
+
 //POST
 //api/property
-routeproperty.post('/property',(req,res) => {	
+_router.post('/property',(req,res) => {	
 
-    var property = JSON.parse(req.body.property);
-	fs.getJSONData(fileName,(data) => {
-		     property['id'] = data.length + 1;
-			 data.push(property);
-			 fs.writeJSONData(fileName,data);
-			 res.send(property);
-            
-		});		
+    var params = JSON.parse(req.body.property);
+	sc.insert(params,(response)=>{
+		 res.send(response);
+	});
 });
 
 //PUT
 //api/property/:id
-routeproperty.put('/property/:id',(req,res) => {	
+_router.put('/property/:id',(req,res) => {	
 
-    var property = JSON.parse(req.body.property);
-	fs.getJSONData(fileName,(data) => {
-			
-			data.forEach((d,i,arr) => {
-				if (d.id == req.params.id)
-				{
-					data[i] = property ;
-					fs.writeJSONData(fileName,data);
-			        res.send(property);
-				}
-			})
-		     
-            
-		});		
+	var params = JSON.parse(req.body.property);
+	var id = req.params.id;
+	sc.update(params, id ,(response)=>{
+		 res.send(response);
+	});
+    
 });
+
 
 //DELETE
 //property/:id
-routeproperty.delete('/property/:id',(req,res) => {
-	
-	fs.getJSONData(fileName,(v) => {
+_router.delete('/property/:id',(req,res) => {
+
+	var id = req.params.id;
+	sc.delete(id ,(response)=>{
+		 res.send(response);
+	});
+	/*fs.getJSONData(fileName,(v) => {
        var data = [];	
        v.forEach((property,index,arr) =>
 	   {
@@ -115,7 +107,7 @@ routeproperty.delete('/property/:id',(req,res) => {
        fs.writeJSONData(fileName,data);   	   
 	   res.status(200).send();
 	});
+	*/
 });
-*/
 
 module.exports = routeproperty ;
