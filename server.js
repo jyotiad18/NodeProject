@@ -7,10 +7,10 @@ var app 		= 	experss();
 var bodyParser 	= 	require('body-parser');
 var morgan 		= 	require('morgan');
 var jwt 		= 	require('jsonwebtoken');// used to create ,sign , and verify tokens
-var session	    =	require('express-session');
+//var session	    =	require('express-session');
 var apiRoutes 	= 	experss.Router();
 var config 		= 	require('./config.js'); //get our config file
-var port 		= 	process.env.PORT || config.port; 
+var port 		= 	process.env.PORT || config.port;
 
 
 
@@ -23,13 +23,13 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 app.use(morgan('dev')); // use morgan to log requests to the console
 app.set('superSecret',config.secret);
 
-app.use(session({
+/*app.use(session({
 		secret : 'sssshhhhh' ,
-		saveUninitialized: true, 
+		saveUninitialized: true,
 		maxAge : 60000
 		})
-	   );
-
+ );
+*/
 
 app.use((req,res,next) => {
 
@@ -45,14 +45,15 @@ app.use((req,res,next) => {
 			default:
 				app.use('/api',
 					[
-					    require('./route/login.js'),
-						require('./route/property.js'),
-						require('./route/logout.js') 						
+						  require('./route/home.js'),
+					      require('./route/login.js'),
+						  require('./route/property.js'),
+						  require('./route/logout.js')
 					]);
 				next();
 			break;
 		}
-	}); 
+	});
 
 
 
